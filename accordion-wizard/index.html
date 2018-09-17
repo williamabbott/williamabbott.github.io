@@ -3,7 +3,7 @@
 	<head>
 		<title>Accordion Wizard</title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script src="jquery.accordion-wizard.min.js"></script>
+		<script src="jquery.accordion-wizard.js"></script>
 
 		<!-- boostrap 4 -->
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
@@ -181,7 +181,11 @@ $(function() {
 		mode: 'wizard', // 'wizard' || 'edit' (defaults to 'wizard')
 		autoButtonsNextClass: 'btn btn-primary float-right',
 		autoButtonsPrevClass: 'btn btn-light',
-		stepNumberClass: 'badge badge-pill badge-primary mr-1'
+		stepNumberClass: 'badge badge-pill badge-primary mr-1',
+		onSubmit: function() {
+			alert('Form submitted!');
+			return true;
+		}
 	});
 });
 </script>
@@ -201,7 +205,11 @@ $(function() {
 					mode: 'wizard',
 					autoButtonsNextClass: 'btn btn-primary float-right',
 					autoButtonsPrevClass: 'btn btn-light',
-					stepNumberClass: 'badge badge-pill badge-primary mr-1'
+					stepNumberClass: 'badge badge-pill badge-primary mr-1',
+					onSubmit: function() {
+						alert('Form submitted!');
+						return true;
+					}
 				});
 
 				var $html = $('.highlightize.html').text().trim();
