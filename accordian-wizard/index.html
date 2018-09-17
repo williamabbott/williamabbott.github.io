@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Accordian Wizard</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="src/jquery.accordian-wizard.js"></script>
+
+		<!-- boostrap 4 -->
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Syntax highligting -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+		<style>
+			div[data-acc-content] { display: none;  }
+			div[data-acc-step]:not(.open) { background: #f2f2f2;  }
+			div[data-acc-step]:not(.open) h5 { color: #777;  }
+			div[data-acc-step]:not(.open) .badge-primary { background: #ccc;  }
+		</style>
+	</head>
+	<body>
+
+		<div class="container py-4">
+
+			<h1>Accordian Wizard Demo</h1>
+
+			<div class="row">
+
+				<div class="col-sm-8 order-last  order-sm-first">
+
+					<p>This is using Bootstrap 4.</p>
+
+					<p>HTML data attributes:</p>
+
+					<ul>
+						<li><code>data-acc-step</code> - defines the step container. In this case, it's added to the <code>.list-group-item</code> element</li>
+						<li><code>data-acc-title</code> - defines the title of the step, only required if you want the plugin to add step numbers for you.</li>
+						<li><code>data-acc-content</code> - defines the content of the step with the form fields.</li>
+					</ul>
+
+					<p>Optionally, if you set <code>autoButtons: false</code>, you must also use these attributes to control navigation:</p>
+
+					<ul>
+						<li><code>data-acc-btn-next</code> - next button</li>
+						<li><code>data-acc-btn-prev</code> - previous button</li>
+					</ul>
+
+					<form id="wizard">
+
+						<div class="list-group">
+
+							<div class="list-group-item py-3" data-acc-step>
+								<h5 class="mb-0" data-acc-title>Name &amp; Email</h5>
+								<div data-acc-content>
+									<div class="my-3">
+										<div class="form-group">
+											<label>Name:</label>
+											<input type="text" name="name" class="form-control" />
+										</div>
+										<div class="form-group">
+											<label>Email:</label>
+											<input type="text" name="email" class="form-control" />
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="list-group-item py-3" data-acc-step>
+								<h5 class="mb-0" data-acc-title>Contact</h5>
+								<div data-acc-content>
+									<div class="my-3">
+										<div class="form-group">
+											<label>Telephone:</label>
+											<input type="text" name="telephone" class="form-control" />
+										</div>
+
+										<div class="form-group">
+											<label>Mobile:</label>
+											<input type="text" name="mobile" class="form-control" />
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="list-group-item py-3" data-acc-step>
+								<h5 class="mb-0" data-acc-title>Payment</h5>
+								<div data-acc-content>
+									<div class="my-3">
+										<div class="form-group">
+											<label>Credit card:</label>
+											<input type="text" name="card" class="form-control">
+										</div>
+										<div class="form-group form-row">
+											<div class="col-sm-4">
+												<label>Expiry:</label>
+												<input type="text" name="expiry" class="form-control">
+											</div>
+											<div class="col-sm-4">
+												<label>CVV:</label>
+												<input type="text" name="cvv" class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</form>
+
+					<h2 class="mt-4">Demo markup</h2>
+
+					<pre><code class="html"></code></pre>
+
+					<script type="text/html" class="highlightize html">
+<form id="wizard">
+
+	<div class="list-group">
+
+		<div class="list-group-item py-3" data-acc-step>
+			<h5 class="mb-0" data-acc-title>Name &amp; Email</h5>
+			<div data-acc-content>
+				<div class="my-3">
+					<div class="form-group">
+						<label>Name:</label>
+						<input type="text" name="name" class="form-control" />
+					</div>
+					<div class="form-group">
+						<label>Email:</label>
+						<input type="text" name="email" class="form-control" />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="list-group-item py-3" data-acc-step>
+			<h5 class="mb-0" data-acc-title>Contact</h5>
+			<div data-acc-content>
+				<div class="my-3">
+					<div class="form-group">
+						<label>Telephone:</label>
+						<input type="text" name="telephone" class="form-control" />
+					</div>
+
+					<div class="form-group">
+						<label>Mobile:</label>
+						<input type="text" name="mobile" class="form-control" />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="list-group-item py-3" data-acc-step>
+			<h5 class="mb-0" data-acc-title>Payment</h5>
+			<div data-acc-content>
+				<div class="my-3">
+					<div class="form-group">
+						<label>Credit card:</label>
+						<input type="text" name="card" class="form-control">
+					</div>
+					<div class="form-group form-row">
+						<div class="col-sm-4">
+							<label>Expiry:</label>
+							<input type="text" name="expiry" class="form-control">
+						</div>
+						<div class="col-sm-4">
+							<label>CVV:</label>
+							<input type="text" name="cvv" class="form-control">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</form>
+
+$(function() {
+	$( "#wizard" ).accWizard({
+		mode: 'wizard', // 'wizard' || 'edit' (defaults to 'wizard')
+		autoButtonsNextClass: 'btn btn-primary float-right',
+		autoButtonsPrevClass: 'btn btn-light',
+		stepNumberClass: 'badge badge-pill badge-primary mr-1'
+	});
+});
+</script>
+
+
+					</script>
+
+				</div>
+
+			</div>
+
+		</div>
+
+		<script>
+			$( function() {
+				$( "#wizard" ).accWizard({
+					mode: 'wizard',
+					autoButtonsNextClass: 'btn btn-primary float-right',
+					autoButtonsPrevClass: 'btn btn-light',
+					stepNumberClass: 'badge badge-pill badge-primary mr-1'
+				});
+
+				var $html = $('.highlightize.html').text().trim();
+				$('code.html').text($html).html();
+
+				hljs.configure({
+				  tabReplace: '  ', // 4 spaces
+				  classPrefix: ''     // don't append class prefix
+				                      // … other options aren't changed
+				});
+				hljs.initHighlighting();
+
+				//var encoded = hljs.highlightBlock(block);
+
+
+				//hljs.initHighlightingOnLoad();
+			});
+
+		</script>
+	</body>
+</html>
