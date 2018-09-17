@@ -45,7 +45,13 @@
 						<li><code>data-acc-btn-prev</code> - previous button</li>
 					</ul>
 
-					<form id="wizard">
+					<div class="mt-4 mb-3 text-muted">
+						<strong>Change mode:</strong> &nbsp;&nbsp;
+						<label><input type="radio" name="toggle_mode" value="wizard" checked="checked"> wizard</label> &nbsp;&nbsp;
+						<label><input type="radio" name="toggle_mode" value="edit"> edit</label>
+					</div>
+
+					<form id="form">
 
 						<div class="list-group">
 
@@ -177,7 +183,7 @@
 </form>
 
 $(function() {
-	$( "#wizard" ).accWizard({
+	$( "#form" ).accWizard({
 		mode: 'wizard', // 'wizard' || 'edit' (defaults to 'wizard')
 		autoButtonsNextClass: 'btn btn-primary float-right',
 		autoButtonsPrevClass: 'btn btn-light',
@@ -200,18 +206,23 @@ $(function() {
 		</div>
 
 		<script>
-			$( function() {
-				$( "#wizard" ).accWizard({
-					mode: 'wizard',
-					autoButtonsNextClass: 'btn btn-primary float-right',
-					autoButtonsPrevClass: 'btn btn-light',
-					stepNumberClass: 'badge badge-pill badge-primary mr-1',
-					onSubmit: function() {
-						alert('Form submitted!');
-						return true;
-					}
-				});
 
+			var options = {
+				mode: 'wizard',
+				autoButtonsNextClass: 'btn btn-primary float-right',
+				autoButtonsPrevClass: 'btn btn-light',
+				stepNumberClass: 'badge badge-pill badge-primary mr-1',
+				onSubmit: function() {
+					alert('Form submitted!');
+					return true;
+				}
+			}
+
+			$( function() {
+
+				$( "#form" ).accWizard(options);
+
+				// syntax
 				var $html = $('.highlightize.html').text().trim();
 				$('code.html').text($html).html();
 
@@ -222,10 +233,19 @@ $(function() {
 				});
 				hljs.initHighlighting();
 
-				//var encoded = hljs.highlightBlock(block);
+				// change mode
+				$('[name="toggle_mode"]').change(function() {
 
+					$('#form').data('plugin_accWizard', false);
+					$('[data-acc-content]').hide();
+					$('[data-acc-btn-next], [data-acc-btn-prev]').off('click');
+					$('#form').off('submit');
+					$('[type="submit"], .acc-step-number, [data-acc-btn-next], [data-acc-btn-prev]').remove();
 
-				//hljs.initHighlightingOnLoad();
+					options.mode = $(this).val();
+					$( "#form" ).accWizard(options);
+
+				});
 			});
 
 		</script>
