@@ -2,12 +2,10 @@
 
 	"use strict";
 
-	var $steps = [];
-
 	var pluginName = "accWizard",
 		defaults = {
 			start: 1,
-			mode: "wizard", // wizard or edit
+			mode: "wizard", // wizard, traditional, edit,
 
 			enableScrolling: true,
 			scrollPadding: 5,
@@ -28,6 +26,7 @@
 
 	function Plugin ( element, options ) {
 		this.element = element;
+		this.$el = $(element);
 
 		this.settings = $.extend( {}, defaults, options );
 		this._defaults = defaults;
@@ -42,21 +41,14 @@
 			var mthis = this;
 
 			// cache the steps
-			this.$steps = $('[data-acc-step]');
+			this.$el.data('steps', $('[data-acc-step]', this.$el));
 
 			// get the initial acc-step height so we can calculate offset in animation
-			this.stepHeight = $('[data-acc-step]').eq(0).outerHeight();
-
-			// step numbers
-			if( this.settings.stepNumbers ) {
-				this.$steps.each(function(i, el) {
-					$('[data-acc-title]', el).prepend('<span class="acc-step-number '+mthis.settings.stepNumberClass+'">' + (i+1) + '</span> ');
-				})
-			}
+			this.$el.data('stepHeight', $('[data-acc-step]', this.$el).eq(0).outerHeight());
 
 			// autobuttons
 			if( this.settings.autoButtons ) {
-				this.$steps.each(function(i, el) {
+				this.$el.data('steps').each(function(i, el) {
 
 					var $content = $('[data-acc-content]', el);
 
@@ -66,7 +58,7 @@
 					}
 
 					// Add next, submit on last
-					if( i < ( mthis.$steps.length - 1 ) ) {
+					if( i < ( mthis.$el.data('steps').length - 1 ) ) {
 						$content.append('<a href="#" class="'+mthis.settings.autoButtonsNextClass+'" data-acc-btn-next>Next</a>');
 					} else if( mthis.settings.autoButtonsShowSubmit ) {
 
@@ -78,24 +70,40 @@
 				})
 			}
 
+			// validate mode
+			if( ['wizard', 'traditional', 'edit'].indexOf( this.settings.mode.toLowerCase() ) < 0 ) {
+				console.log('mode not recognised, choosing wizard');
+				this.settings.mode = 'wizard';
+			}
 
 			// set current
-			this.currentIndex = this.settings.start - 1;
+			this.$el.data('currentIndex', this.settings.start - 1);
 
-			if( this.settings.mode == 'wizard' ) {
-				// 'wizard' mode
+			if( this.settings.mode == 'wizard' || this.settings.mode == 'traditional' ) {
 
-				this.activateStep( this.currentIndex, true );
+				this.activateStep( this.$el.data('currentIndex'), true );
 
-				$('[data-acc-btn-next]').on('click', function() {
-					if( mthis.settings.beforeNextStep( mthis.currentIndex + 1 ) ) {
-						mthis.activateStep( mthis.currentIndex + 1 );
+				$('[data-acc-btn-next]', this.$el).on('click', function() {
+					if( mthis.settings.beforeNextStep( mthis.$el.data('currentIndex') + 1 ) ) {
+						mthis.activateStep( mthis.$el.data('currentIndex') + 1 );
 					}
 				});
 
-				$('[data-acc-btn-prev]').on('click', function() {
-					mthis.activateStep( mthis.currentIndex - 1 );
+				$('[data-acc-btn-prev]', this.$el).on('click', function() {
+					mthis.activateStep( mthis.$el.data('currentIndex') - 1 );
 				});
+
+				if( this.settings.mode == 'traditional' ) {
+
+					var $step_indicators = $('[data-acc-step-indicators]');
+
+					for( var i in this.$el.data('steps') ) {
+
+					}
+
+					//data-acc-step-indicators
+				}
+
 
 			} else if ( this.settings.mode == 'edit' ) {
 				// 'edit' mode
@@ -106,8 +114,16 @@
 
 			}
 
+			// step numbers
+			if( this.settings.stepNumbers ) {
+				this.$el.data('steps').each(function(i, el) {
+					$('[data-acc-title]', el).prepend('<span class="acc-step-number '+mthis.settings.stepNumberClass+'">' + (i+1) + '</span> ');
+				})
+			}
+
+
 			// onsubmit
-			$(this.element).on('submit', function(e) {
+			$(this.$el).on('submit', function(e) {
 				var resp = mthis.settings.onSubmit();
 				if( !resp )
 					e.preventDefault();
@@ -115,35 +131,47 @@
 
 		},
 		deactivateStep: function(index, disableScrollOverride) {
-			this.$steps.eq(index).removeClass('active');
+			this.$el.data('steps').eq(index).removeClass('active');
 		},
 		activateStep: function(index, disableScrollOverride) {
 
-			this.$steps.removeClass('open');
+			console.log(this.settings.mode);
 
-			var offset = index > this.currentIndex ? this.stepHeight : -this.stepHeight;
+			this.$el.data('steps').removeClass('open');
+
+			var offset = index > this.$el.data('currentIndex') ? this.$el.data('stepHeight') : -this.$el.data('stepHeight');
 
 			if( !disableScrollOverride && this.settings.enableScrolling ) {
 			    $('html').animate({
-			        scrollTop: this.$steps.eq(this.currentIndex).offset().top + ( offset - this.settings.scrollPadding )
+			        scrollTop: this.$el.data('steps').eq(this.$el.data('currentIndex')).offset().top + ( offset - this.settings.scrollPadding )
 			    }, 500);
 			}
 
-	    	//$('.collapse', this.$steps.eq(index)).stop().collapse('show');
-	    	$('[data-acc-content]', this.element).slideUp();
+			if( this.settings.mode == 'wizard' ) {
 
-			this.$steps.eq(index)
-				.addClass('open')
-				.find('[data-acc-content]').slideDown();
+				$('[data-acc-content]', this.$el).slideUp();
 
-			this.currentIndex = index;
+				this.$el.data('steps').eq(index)
+					.addClass('open')
+					.find('[data-acc-content]').slideDown();
+
+			} else if( this.settings.mode == 'traditional' ) {
+
+				$('[data-acc-content]', this.$el).hide();
+
+				this.$el.data('steps').eq(index)
+					.addClass('open')
+					.find('[data-acc-content]').show();
+			}
+
+			this.$el.data('currentIndex', index);
 		},
 		activateNextStep: function() {
-			this.activateStep( this.currentIndex + 1 );
+			this.activateStep( this.$el.data('currentIndex') + 1 );
 		},
 		activateAllSteps: function() {
-			this.$steps.addClass('open');
-			$('[data-acc-content]', this.element).show();
+			this.$el.data('steps').addClass('open');
+			$('[data-acc-content]', this.$el).show();
 		}
 	});
 
