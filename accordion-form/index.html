@@ -1,22 +1,16 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Accordion Wizard</title>
-
-		<meta http-equiv="refresh" content="1;url=https://wrabit.github.io/accordion-form" />
+		<title>Accordion Form</title>
 
 	    <meta charset="utf-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	    <meta name="description" content="A jQuery plugin that helps you build form wizards. With 2 modes: 'Wizard' and 'Edit'.">
+	    <meta name="description" content="A jQuery plugin that helps you build accordion forms. With 2 modes: 'accordion' and 'edit'.">
 	    <meta name="author" content="William Abbott">
 	    <link rel="icon" href="favicon.png">
 
-	    <script>
-	    	window.location.href = "https://wrabit.github.io/accordion-form";
-	    </script>
-
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script src="jquery.accordion-wizard.js"></script>
+		<script src="jquery.accordion-form.min.js"></script>
 
 		<!-- boostrap 4 -->
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
@@ -39,7 +33,7 @@
 
 			<img src="logo.png" width="45" class="float-left mr-1">
 
-			<h1 class="mb-4">Accordion Wizard Demo</h1>
+			<h1 class="mb-4">Accordion Form Demo</h1>
 
 			<div class="row">
 
@@ -64,7 +58,7 @@
 
 					<div class="mt-4 mb-3 text-muted">
 						<strong>Change mode:</strong> &nbsp;&nbsp;
-						<label><input type="radio" name="toggle_mode" value="wizard" checked="checked"> wizard</label> &nbsp;&nbsp;
+						<label><input type="radio" name="toggle_mode" value="accordion" checked="checked"> accordion</label> &nbsp;&nbsp;
 						<label><input type="radio" name="toggle_mode" value="edit"> edit</label>
 					</div>
 
@@ -144,7 +138,7 @@
 	div[data-acc-step]:not(.open) .badge-primary { background: #ccc;  }
 </style>
 
-<form id="wizard">
+<form id="accordion">
 
 	<div class="list-group">
 
@@ -211,8 +205,8 @@
 </form>
 
 $(function() {
-	$( "#form" ).accWizard({
-		mode: 'wizard',
+	$( "#form" ).accordionForm({
+		mode: 'accordion',
 		autoButtonsNextClass: 'btn btn-primary float-right',
 		autoButtonsPrevClass: 'btn btn-light',
 		stepNumberClass: 'badge badge-pill badge-primary mr-1',
@@ -236,7 +230,7 @@ $(function() {
 		<script>
 
 			var options = {
-				mode: 'wizard',
+				mode: 'accordion',
 				autoButtonsNextClass: 'btn btn-primary float-right',
 				autoButtonsPrevClass: 'btn btn-light',
 				stepNumberClass: 'badge badge-pill badge-primary mr-1',
@@ -248,7 +242,7 @@ $(function() {
 
 			$( function() {
 
-				$( "#form" ).accWizard(options);
+				$( "#form" ).accordionForm(options);
 
 				// syntax
 				var $html = $('.highlightize.html').text().trim();
@@ -264,14 +258,14 @@ $(function() {
 				// change mode
 				$('[name="toggle_mode"]').change(function() {
 
-					$('#form').data('plugin_accWizard', false);
+					$('#form').data('plugin_accordionForm', false);
 					$('[data-acc-content]').hide();
 					$('[data-acc-btn-next], [data-acc-btn-prev]').off('click');
 					$('#form').off('submit');
 					$('[type="submit"], .acc-step-number, [data-acc-btn-next], [data-acc-btn-prev]').remove();
 
 					options.mode = $(this).val();
-					$( "#form" ).accWizard(options);
+					$( "#form" ).accordionForm(options);
 
 				});
 			});
